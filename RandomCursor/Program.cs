@@ -17,8 +17,6 @@ switch (command)
 {
     case "--startup-run":
 
-        Thread.Sleep(5000);
-
         scheme =
             SchemeManager.GetRandom(config);
 
