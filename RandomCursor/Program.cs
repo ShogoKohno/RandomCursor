@@ -1,35 +1,62 @@
-﻿using RandomCursor.Services;
+﻿using RandomCursor.Models;
+using RandomCursor.Services;
 
-try
+
+var config =
+    ConfigManager.Load();
+
+
+string? command =
+    CommandManager.GetCommand(args);
+
+
+CursorScheme? scheme;
+
+
+switch (command)
 {
-    var config =
-        ConfigManager.Load();
+    case "--list":
 
+        foreach (var s in
+            SchemeManager.GetAll(config))
+        {
+            Console.WriteLine(s.Name);
+        }
 
-    var scheme =
-        SchemeManager.GetRandom(config);
-
-
-    if (scheme == null)
-    {
-        Console.WriteLine(
-            "対象スキームなし");
         return;
-    }
 
 
-    CursorManager.Apply(scheme);
+    case "--apply":
+
+        string? name =
+            CommandManager.GetArgument(args);
+
+        scheme =
+            SchemeManager.GetByName(
+                config,
+                name);
+
+        break;
 
 
-    Logger.Write(
-        config,
-        scheme);
+    default:
 
+        scheme =
+            SchemeManager.GetRandom(config);
 
-    Console.WriteLine(
-        $"適用 : {scheme.Name}");
+        break;
 }
-catch (Exception ex)
+
+
+if (scheme == null)
 {
-    Console.WriteLine(ex.Message);
+    Console.WriteLine(
+        "対象スキームなし");
+    return;
 }
+
+
+CursorManager.Apply(scheme);
+
+Console.WriteLine(
+    $"適用 : {scheme.Name}");

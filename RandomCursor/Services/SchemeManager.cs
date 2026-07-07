@@ -88,4 +88,21 @@ public static class SchemeManager
 
         return result;
     }
+    public static List<CursorScheme> GetAll(
+    AppConfig config)
+    {
+        return Load(config.Prefix);
+    }
+    public static CursorScheme? GetByName(
+    AppConfig config,
+    string? name)
+    {
+        if (name == null)
+            return null;
+
+
+        return Load(config.Prefix)
+            .FirstOrDefault(
+                x => x.Name == name);
+    }
 }
