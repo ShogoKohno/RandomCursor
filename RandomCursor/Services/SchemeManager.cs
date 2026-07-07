@@ -10,6 +10,9 @@ public static class SchemeManager
         @"Control Panel\Cursors\Schemes";
 
 
+    /// <summary>
+    /// ランダムにスキームを取得
+    /// </summary>
     public static CursorScheme? GetRandom(
         AppConfig config)
     {
@@ -49,10 +52,41 @@ public static class SchemeManager
     }
 
 
+    /// <summary>
+    /// 全スキーム取得
+    /// </summary>
+    public static List<CursorScheme> GetAll(
+        AppConfig config)
+    {
+        return Load(config.Prefix);
+    }
+
+
+    /// <summary>
+    /// 名前指定で取得
+    /// </summary>
+    public static CursorScheme? GetByName(
+        AppConfig config,
+        string? name)
+    {
+        if (string.IsNullOrEmpty(name))
+            return null;
+
+
+        return Load(config.Prefix)
+            .FirstOrDefault(
+                x => x.Name == name);
+    }
+
+
+    /// <summary>
+    /// レジストリからスキーム読み込み
+    /// </summary>
     private static List<CursorScheme> Load(
         string prefix)
     {
-        List<CursorScheme> result = new();
+        List<CursorScheme> result =
+            new();
 
 
         using RegistryKey? key =
@@ -75,7 +109,7 @@ public static class SchemeManager
                 as string;
 
 
-            if (value == null)
+            if (string.IsNullOrEmpty(value))
                 continue;
 
 
@@ -87,22 +121,5 @@ public static class SchemeManager
 
 
         return result;
-    }
-    public static List<CursorScheme> GetAll(
-    AppConfig config)
-    {
-        return Load(config.Prefix);
-    }
-    public static CursorScheme? GetByName(
-    AppConfig config,
-    string? name)
-    {
-        if (name == null)
-            return null;
-
-
-        return Load(config.Prefix)
-            .FirstOrDefault(
-                x => x.Name == name);
     }
 }

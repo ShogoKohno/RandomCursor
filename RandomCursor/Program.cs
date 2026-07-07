@@ -58,5 +58,9 @@ if (scheme == null)
 
 CursorManager.Apply(scheme);
 
+Logger.Write(
+    config,
+    scheme);
+
 Console.WriteLine(
     $"適用 : {scheme.Name}");
