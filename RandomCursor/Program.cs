@@ -16,13 +16,15 @@ try
             };
 
 
-    Logger.Info(
-        $"Application started. Mode={mode}");
-
-
     var config =
         ConfigManager.Load();
 
+    Logger.Initialize(
+    config);
+
+
+    Logger.Info(
+        $"Application started. Mode={mode}");
 
     string? command =
         CommandManager.GetCommand(args);

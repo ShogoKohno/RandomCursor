@@ -1,10 +1,30 @@
-﻿namespace RandomCursor.Services;
+﻿using RandomCursor.Config;
+
+namespace RandomCursor.Services;
 
 public static class Logger
 {
+    private static bool _enabled = true;
+    private static int _maxLogSizeMB = 1;
+
+
+    public static void Initialize(
+        AppConfig config)
+    {
+        _enabled =
+            config.WriteLog;
+
+        _maxLogSizeMB =
+            config.MaxLogSizeMB > 0
+                ? config.MaxLogSizeMB
+                : 1;
+    }
+
     private static readonly string LogDirectory =
         Path.Combine(
-            AppContext.BaseDirectory,
+            Environment.GetFolderPath(
+                Environment.SpecialFolder.ApplicationData),
+            "RandomCursor",
             "Logs");
 
 
@@ -15,7 +35,7 @@ public static class Logger
 
 
     public static void Info(string message)
-    {
+    {   
         Write(
             "INFO",
             message);
@@ -34,6 +54,11 @@ public static class Logger
         string level,
         string message)
     {
+        if (!_enabled)
+        {
+            return;
+        }
+
         try
         {
             Directory.CreateDirectory(
@@ -68,8 +93,7 @@ public static class Logger
             new FileInfo(LogFile);
 
 
-        // 1MB未満なら何もしない
-        if (info.Length < 1024 * 1024)
+        if (info.Length < _maxLogSizeMB * 1024 * 1024)
         {
             return;
         }
