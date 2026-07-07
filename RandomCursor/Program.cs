@@ -12,6 +12,7 @@ try
                 "--apply" => "Apply",
                 "--list" => "List",
                 "--startup" => "StartupSetup",
+                "--random" => "Random",
                 _ => "Unknown"
             };
 
@@ -35,6 +36,13 @@ try
 
     switch (command)
     {
+        case "--random":
+
+            scheme =
+                SchemeManager.GetRandom(config);
+
+            break;
+
         case "--startup-run":
 
             scheme =

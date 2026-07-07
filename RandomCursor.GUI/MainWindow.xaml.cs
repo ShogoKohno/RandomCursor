@@ -11,12 +11,17 @@ using System.Windows.Shapes;
 using RandomCursor.Services;
 using RandomCursor.Config;
 using System.IO;
+using System.Threading;
+using MessageBox = System.Windows.MessageBox;
 
 namespace RandomCursor.GUI
 {
    public partial class MainWindow : Window
     {
         private AppConfig _config;
+
+        private CancellationTokenSource?
+    _statusCancellation;
         public MainWindow()
         {
             InitializeComponent();
@@ -77,8 +82,8 @@ namespace RandomCursor.GUI
                 _config);
 
 
-            MessageBox.Show(
-                "設定を保存しました。");
+            ShowStatus(
+                "設定を保存しました");
         }
         private void ApplyButton_Click(
     object sender,
@@ -87,7 +92,7 @@ namespace RandomCursor.GUI
             if (SchemeListBox.SelectedItem == null)
             {
                 MessageBox.Show(
-                    "スキームを選択してください。");
+                    "スキームを選択してください");
 
                 return;
             }
@@ -107,7 +112,7 @@ namespace RandomCursor.GUI
             if (scheme == null)
             {
                 MessageBox.Show(
-                    "スキームが見つかりません。");
+                    "スキームが見つかりません");
 
                 return;
             }
@@ -117,8 +122,8 @@ namespace RandomCursor.GUI
                 scheme);
 
 
-            MessageBox.Show(
-                $"適用しました: {scheme.Name}");
+            ShowStatus(
+                "カーソルを変更しました");
         }
         private void UpdateStartupStatus()
         {
@@ -137,8 +142,8 @@ namespace RandomCursor.GUI
             UpdateStartupStatus();
 
 
-            MessageBox.Show(
-                "スタートアップを有効化しました。");
+            ShowStatus(
+                "スタートアップを有効化しました");
         }
         private void DisableStartupButton_Click(
     object sender,
@@ -150,8 +155,52 @@ namespace RandomCursor.GUI
             UpdateStartupStatus();
 
 
-            MessageBox.Show(
-                "スタートアップを無効化しました。");
+            ShowStatus(
+                "スタートアップを無効化しました");
+        }
+        private async void ShowStatus(
+            string message)
+        {
+            _statusCancellation?
+                .Cancel();
+
+
+            _statusCancellation =
+                new CancellationTokenSource();
+
+
+            CancellationToken token =
+                _statusCancellation.Token;
+
+
+            StatusText.Text = message;
+
+
+            try
+            {
+                await Task.Delay(
+                    2000,
+                    token);
+
+
+                if (!token.IsCancellationRequested)
+                {
+                    StatusText.Text = "";
+                }
+            }
+            catch (TaskCanceledException)
+            {
+                // 新しいメッセージ表示によるキャンセル
+            }
+        }
+        protected override void OnClosing(
+    System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+
+            Hide();
+
+            base.OnClosing(e);
         }
     }
 }

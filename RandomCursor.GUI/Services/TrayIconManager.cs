@@ -1,0 +1,117 @@
+﻿using RandomCursor.Services;
+using System.Diagnostics;
+using System.Drawing;
+using System.Windows;
+using System.Windows.Forms;
+
+namespace RandomCursor.GUI.Services;
+
+public class TrayIconManager
+{
+    private readonly NotifyIcon _notifyIcon;
+
+
+    public TrayIconManager()
+    {
+        _notifyIcon = new NotifyIcon
+        {
+            Icon = SystemIcons.Application,
+            Visible = true,
+            Text = "RandomCursor"
+        };
+
+
+        var menu =
+            new ContextMenuStrip();
+
+        var randomItem =
+    new ToolStripMenuItem(
+        "今すぐ変更");
+
+
+        var openItem =
+            new ToolStripMenuItem(
+                "設定を開く");
+
+
+        var exitItem =
+            new ToolStripMenuItem(
+                "終了");
+
+        menu.Items.Add(
+    randomItem);
+        menu.Items.Add(openItem);
+        menu.Items.Add(exitItem);
+
+
+        _notifyIcon.ContextMenuStrip =
+            menu;
+
+        randomItem.Click +=
+            (_, _) =>
+            {
+                RunRandomCursor();
+            };
+
+        openItem.Click +=
+            (_, _) =>
+            {
+                OpenWindow();
+            };
+
+
+        exitItem.Click +=
+            (_, _) =>
+            {
+                _notifyIcon.Visible = false;
+                _notifyIcon.Dispose();
+
+                System.Windows.Application.Current.Shutdown();
+            };
+    }
+
+
+    private void OpenWindow()
+    {
+        System.Windows.Application.Current.Dispatcher.Invoke(
+            () =>
+            {
+                foreach (Window window in
+                    System.Windows.Application.Current.Windows)
+                {
+                    if (window is MainWindow main)
+                    {
+                        main.Show();
+                        main.WindowState =
+                            WindowState.Normal;
+
+                        main.Activate();
+
+                        return;
+                    }
+                }
+
+
+                var newWindow =
+                    new MainWindow();
+
+                newWindow.Show();
+            });
+    }
+    private void RunRandomCursor()
+    {
+        Process.Start(
+            new ProcessStartInfo
+            {
+                FileName =
+                    "RandomCursor.exe",
+
+                Arguments =
+                    "--random",
+
+                CreateNoWindow = true,
+                UseShellExecute = false
+            });
+    }
+
+}
