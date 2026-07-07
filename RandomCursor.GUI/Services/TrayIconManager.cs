@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Forms;
+using System.IO;
 
 namespace RandomCursor.GUI.Services;
 
@@ -15,7 +16,12 @@ public class TrayIconManager
     {
         _notifyIcon = new NotifyIcon
         {
-            Icon = SystemIcons.Application,
+            Icon =
+new Icon(
+    Path.Combine(
+        AppDomain.CurrentDomain.BaseDirectory,
+        "Resources",
+        "RandomCursor.ico")),
             Visible = true,
             Text = "RandomCursor"
         };
