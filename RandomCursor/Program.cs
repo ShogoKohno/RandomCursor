@@ -1,13 +1,35 @@
-﻿CursorScheme? scheme =
-    SchemeManager.SelectRandom();
+﻿using RandomCursor.Services;
 
-if (scheme == null)
+try
 {
-    Console.WriteLine("対象スキームがありません。");
-    return;
+    var config =
+        ConfigManager.Load();
+
+
+    var scheme =
+        SchemeManager.GetRandom(config);
+
+
+    if (scheme == null)
+    {
+        Console.WriteLine(
+            "対象スキームなし");
+        return;
+    }
+
+
+    CursorManager.Apply(scheme);
+
+
+    Logger.Write(
+        config,
+        scheme);
+
+
+    Console.WriteLine(
+        $"適用 : {scheme.Name}");
 }
-
-CursorManager.Apply(scheme);
-
-Console.WriteLine(
-    $"適用しました : {scheme.Name}");
+catch (Exception ex)
+{
+    Console.WriteLine(ex.Message);
+}
