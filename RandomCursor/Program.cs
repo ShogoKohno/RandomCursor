@@ -15,6 +15,47 @@ CursorScheme? scheme;
 
 switch (command)
 {
+    case "--startup-run":
+
+        Thread.Sleep(5000);
+
+        scheme =
+            SchemeManager.GetRandom(config);
+
+        break;
+
+    case "--startup":
+
+        StartupManager.Enable(
+            Environment.ProcessPath!);
+
+        Console.WriteLine(
+            "Startup enabled");
+
+        return;
+
+
+
+    case "--remove-startup":
+
+        StartupManager.Disable();
+
+        Console.WriteLine(
+            "Startup disabled");
+
+        return;
+
+
+
+    case "--startup-status":
+
+        Console.WriteLine(
+            StartupManager.IsEnabled()
+                ? "Startup: Enabled"
+                : "Startup: Disabled");
+
+        return;
+
     case "--list":
 
         foreach (var s in
