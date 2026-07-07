@@ -1,105 +1,120 @@
 ﻿using RandomCursor.Models;
 using RandomCursor.Services;
-
-
-var config =
-    ConfigManager.Load();
-
-
-string? command =
-    CommandManager.GetCommand(args);
-
-
-CursorScheme? scheme;
-
-
-switch (command)
+try
 {
-    case "--startup-run":
 
-        scheme =
-            SchemeManager.GetRandom(config);
+        Logger.Info(
+        "Application started");
 
-        break;
 
-    case "--startup":
+    var config =
+        ConfigManager.Load();
 
-        StartupManager.Enable(
-            Environment.ProcessPath!);
+
+    string? command =
+        CommandManager.GetCommand(args);
+
+
+    CursorScheme? scheme;
+
+
+    switch (command)
+    {
+        case "--startup-run":
+
+            scheme =
+                SchemeManager.GetRandom(config);
+
+            break;
+
+        case "--startup":
+
+            StartupManager.Enable(
+                Environment.ProcessPath!);
+
+            Console.WriteLine(
+                "Startup enabled");
+
+            return;
+
+
+
+        case "--remove-startup":
+
+            StartupManager.Disable();
+
+            Console.WriteLine(
+                "Startup disabled");
+
+            return;
+
+
+
+        case "--startup-status":
+
+            Console.WriteLine(
+                StartupManager.IsEnabled()
+                    ? "Startup: Enabled"
+                    : "Startup: Disabled");
+
+            return;
+
+        case "--list":
+
+            foreach (var s in
+                SchemeManager.GetAll(config))
+            {
+                Console.WriteLine(s.Name);
+            }
+
+            return;
+
+
+        case "--apply":
+
+            string? name =
+                CommandManager.GetArgument(args);
+
+            scheme =
+                SchemeManager.GetByName(
+                    config,
+                    name);
+
+            break;
+
+
+        default:
+
+            scheme =
+                SchemeManager.GetRandom(config);
+
+            break;
+    }
+
+
+    if (scheme == null)
+    {
+        Logger.Error(
+        "No scheme found");
 
         Console.WriteLine(
-            "Startup enabled");
-
+            "対象スキームなし");
         return;
+    }
 
 
+    CursorManager.Apply(scheme);
 
-    case "--remove-startup":
+    Logger.Info(
+        $"Applied scheme: {scheme.Name}");
 
-        StartupManager.Disable();
-
-        Console.WriteLine(
-            "Startup disabled");
-
-        return;
-
-
-
-    case "--startup-status":
-
-        Console.WriteLine(
-            StartupManager.IsEnabled()
-                ? "Startup: Enabled"
-                : "Startup: Disabled");
-
-        return;
-
-    case "--list":
-
-        foreach (var s in
-            SchemeManager.GetAll(config))
-        {
-            Console.WriteLine(s.Name);
-        }
-
-        return;
-
-
-    case "--apply":
-
-        string? name =
-            CommandManager.GetArgument(args);
-
-        scheme =
-            SchemeManager.GetByName(
-                config,
-                name);
-
-        break;
-
-
-    default:
-
-        scheme =
-            SchemeManager.GetRandom(config);
-
-        break;
-}
-
-
-if (scheme == null)
-{
     Console.WriteLine(
-        "対象スキームなし");
-    return;
+        $"適用 : {scheme.Name}");
 }
+catch (Exception ex)
+{
+    Logger.Error(
+        ex.ToString());
 
-
-CursorManager.Apply(scheme);
-
-Logger.Write(
-    config,
-    scheme);
-
-Console.WriteLine(
-    $"適用 : {scheme.Name}");
+    Environment.Exit(1);
+}

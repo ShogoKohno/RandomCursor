@@ -1,20 +1,57 @@
-﻿using RandomCursor.Config;
-using RandomCursor.Models;
-
-namespace RandomCursor.Services;
+﻿namespace RandomCursor.Services;
 
 public static class Logger
 {
-    public static void Write(
-        AppConfig config,
-        CursorScheme scheme)
+    private static readonly string LogDirectory =
+        Path.Combine(
+            AppContext.BaseDirectory,
+            "Logs");
+
+
+    private static readonly string LogFile =
+        Path.Combine(
+            LogDirectory,
+            "RandomCursor.log");
+
+
+    public static void Info(string message)
     {
-        if (!config.WriteLog)
-            return;
+        Write(
+            "INFO",
+            message);
+    }
 
 
-        File.AppendAllText(
-            config.LogFile,
-            $"{DateTime.Now} : {scheme.Name}\n");
+    public static void Error(string message)
+    {
+        Write(
+            "ERROR",
+            message);
+    }
+
+
+    private static void Write(
+        string level,
+        string message)
+    {
+        try
+        {
+            Directory.CreateDirectory(
+                LogDirectory);
+
+
+            string log =
+                $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] " +
+                $"{level}: {message}";
+
+
+            File.AppendAllText(
+                LogFile,
+                log + Environment.NewLine);
+        }
+        catch
+        {
+            // ログ失敗ではアプリを停止しない
+        }
     }
 }
