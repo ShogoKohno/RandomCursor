@@ -5,6 +5,11 @@ VisualStudioVersion = 17.14.37301.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RandomCursor", "RandomCursor\RandomCursor.csproj", "{FD3ACF9B-2E5F-4D24-96D8-D4F14E1A73AF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RandomCursor.GUI", "RandomCursor.GUI\RandomCursor.GUI.csproj", "{96E4DA31-5C68-4122-8E54-E6972A3A7E5F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FD3ACF9B-2E5F-4D24-96D8-D4F14E1A73AF} = {FD3ACF9B-2E5F-4D24-96D8-D4F14E1A73AF}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +20,10 @@ Global
 		{FD3ACF9B-2E5F-4D24-96D8-D4F14E1A73AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD3ACF9B-2E5F-4D24-96D8-D4F14E1A73AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD3ACF9B-2E5F-4D24-96D8-D4F14E1A73AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96E4DA31-5C68-4122-8E54-E6972A3A7E5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96E4DA31-5C68-4122-8E54-E6972A3A7E5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96E4DA31-5C68-4122-8E54-E6972A3A7E5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96E4DA31-5C68-4122-8E54-E6972A3A7E5F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

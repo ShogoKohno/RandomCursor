@@ -44,8 +44,7 @@ try
 
         case "--startup":
 
-            StartupManager.Enable(
-                Environment.ProcessPath!);
+            StartupManager.Enable();
 
             Console.WriteLine(
                 "Startup enabled");

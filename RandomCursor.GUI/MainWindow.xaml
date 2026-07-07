@@ -1,0 +1,101 @@
+﻿<Window
+    x:Class="RandomCursor.GUI.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="RandomCursor Settings"
+    Width="450"
+    Height="600"
+    MinWidth="450"
+    MinHeight="600"
+    MaxWidth="450"
+    MaxHeight="600"
+    WindowStartupLocation="CenterScreen"
+    ResizeMode="NoResize">
+
+    <StackPanel Margin="20">
+
+        <TextBlock
+            Text="RandomCursor Settings"
+            FontSize="20"/>
+
+        <TextBlock
+            Text="Prefix"
+            Margin="0,20,0,5"/>
+
+        <TextBox
+            Name="PrefixBox"/>
+
+        <CheckBox
+            Name="AvoidPreviousCheck"
+            Content="前回と同じスキームを避ける"
+            Margin="0,10,0,0"/>
+
+        <TextBlock
+            Text="スキーム一覧"
+            Margin="0,20,0,5"/>
+
+
+        <ListBox
+            Name="SchemeListBox"
+            Height="100"/>
+
+
+        <Button
+            Name="ApplyButton"
+            Content="選択したスキームを適用"
+            Margin="0,10,0,0"
+            Click="ApplyButton_Click"/>
+
+        <TextBlock
+            Text="スタートアップ"
+            Margin="0,20,0,5"/>
+
+
+        <TextBlock
+            Name="StartupStatusText"
+            Text="状態確認中..."
+            Margin="0,5,0,10"/>
+
+
+        <StackPanel
+            Orientation="Horizontal">
+
+            <Button
+            Name="EnableStartupButton"
+            Content="有効化"
+            Width="100"
+            Click="EnableStartupButton_Click"/>
+
+
+            <Button
+            Name="DisableStartupButton"
+            Content="無効化"
+            Width="100"
+            Margin="10,0,0,0"
+            Click="DisableStartupButton_Click"/>
+
+        </StackPanel>
+
+        <CheckBox
+            Name="WriteLogCheck"
+            Content="ログを有効化"
+            Margin="0,10,0,0"/>
+
+
+        <TextBlock
+            Text="ログサイズ(MB)"
+            Margin="0,10,0,5"/>
+
+
+        <TextBox
+            Name="MaxLogSizeBox"/>
+
+        <Button
+            Name="SaveButton"
+            Content="保存"
+            Margin="0,20,0,0"
+            Click="SaveButton_Click"/>
+
+    </StackPanel>
+
+</Window>

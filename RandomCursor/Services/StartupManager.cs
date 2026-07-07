@@ -7,9 +7,28 @@ public static class StartupManager
 {
     private const string TaskName = "RandomCursor";
 
-
-    public static void Enable(string exePath)
+    private static string GetExecutablePath()
     {
+        string directory =
+            AppDomain.CurrentDomain.BaseDirectory;
+
+
+        return System.IO.Path.Combine(
+            directory,
+            "RandomCursor.exe");
+    }
+
+    private static string GetCoreExecutablePath()
+    {
+        return @"C:\Users\torin\source\repos\RandomCursor\RandomCursor\bin\Debug\net8.0\RandomCursor.exe";
+    }
+
+
+    public static void Enable()
+    {
+        string exePath =
+    GetCoreExecutablePath();
+
         string arguments =
             "--startup-run";
 
