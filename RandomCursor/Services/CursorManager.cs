@@ -8,23 +8,23 @@ public static class CursorManager
 {
     private static readonly string[] Names =
     {
-        "",
-        "Help",
-        "AppStarting",
-        "Wait",
-        "Crosshair",
-        "IBeam",
-        "NWPen",
-        "No",
-        "SizeNS",
-        "SizeWE",
-        "SizeNWSE",
-        "SizeNESW",
-        "SizeAll",
-        "UpArrow",
-        "Hand",
-        "Pin",
-        "Person"
+    "Arrow",
+    "Help",
+    "AppStarting",
+    "Wait",
+    "Crosshair",
+    "IBeam",
+    "NWPen",
+    "No",
+    "SizeNS",
+    "SizeWE",
+    "SizeNWSE",
+    "SizeNESW",
+    "SizeAll",
+    "UpArrow",
+    "Hand",
+    "Pin",
+    "Person"
     };
 
 
