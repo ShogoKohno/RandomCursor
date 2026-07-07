@@ -39,6 +39,8 @@ public static class Logger
             Directory.CreateDirectory(
                 LogDirectory);
 
+            RotateIfNeeded();
+
 
             string log =
                 $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] " +
@@ -53,5 +55,44 @@ public static class Logger
         {
             // ログ失敗ではアプリを停止しない
         }
+    }
+    private static void RotateIfNeeded()
+    {
+        if (!File.Exists(LogFile))
+        {
+            return;
+        }
+
+
+        FileInfo info =
+            new FileInfo(LogFile);
+
+
+        // 1MB未満なら何もしない
+        if (info.Length < 1024 * 1024)
+        {
+            return;
+        }
+
+
+        string archiveDirectory =
+            Path.Combine(
+                LogDirectory,
+                "Archive");
+
+
+        Directory.CreateDirectory(
+            archiveDirectory);
+
+
+        string archiveFile =
+            Path.Combine(
+                archiveDirectory,
+                $"RandomCursor_{DateTime.Now:yyyyMMdd_HHmmss}.log");
+
+
+        File.Move(
+            LogFile,
+            archiveFile);
     }
 }

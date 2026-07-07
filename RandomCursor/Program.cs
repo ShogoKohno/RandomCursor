@@ -3,8 +3,21 @@ using RandomCursor.Services;
 try
 {
 
-        Logger.Info(
-        "Application started");
+    string mode =
+        args.Length == 0
+            ? "Normal"
+            : args[0] switch
+            {
+                "--startup-run" => "Startup",
+                "--apply" => "Apply",
+                "--list" => "List",
+                "--startup" => "StartupSetup",
+                _ => "Unknown"
+            };
+
+
+    Logger.Info(
+        $"Application started. Mode={mode}");
 
 
     var config =
