@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.IO;
 
 namespace RandomCursor.Services;
@@ -7,13 +7,7 @@ public static class StartupManager
 {
     private const string TaskName = "RandomCursor";
 
-    private const string AppName =
-        "RandomCursor";
 
-
-    /// <summary>
-    /// スタートアップ登録
-    /// </summary>
     public static void Enable(string exePath)
     {
         string arguments =
@@ -25,9 +19,6 @@ public static class StartupManager
             "/SC ONLOGON " +
             "/F";
 
-        if (key == null)
-            throw new Exception(
-                "Startup registry unavailable");
 
         var process = Process.Start(
             new ProcessStartInfo
@@ -40,10 +31,6 @@ public static class StartupManager
                 RedirectStandardError = true
             });
 
-        key.SetValue(
-            AppName,
-            $"\"{exePath}\" --startup-run");
-    }
 
         string output =
             process!.StandardOutput.ReadToEnd();
@@ -72,10 +59,6 @@ public static class StartupManager
     }
 
 
-
-    /// <summary>
-    /// 登録状態確認
-    /// </summary>
     public static bool IsEnabled()
     {
         Process process =
