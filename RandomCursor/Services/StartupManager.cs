@@ -11,8 +11,18 @@ public static class StartupManager
 
     private static string GetCoreExecutablePath()
     {
-        return Environment.ProcessPath
-            ?? throw new InvalidOperationException("Executable path could not be resolved.");
+        string path = Path.Combine(
+            AppDomain.CurrentDomain.BaseDirectory,
+            "RandomCursor.exe");
+
+        if (!File.Exists(path))
+        {
+            throw new FileNotFoundException(
+                "RandomCursor.exe Ç™å©Ç¬Ç©ÇËÇ‹ÇπÇÒÅB",
+                path);
+        }
+
+        return path;
     }
 
 
@@ -24,30 +34,35 @@ public static class StartupManager
 
     public static void Enable()
     {
-        using RegistryKey key =
-            Registry.CurrentUser.CreateSubKey(
-                RunKeyPath)!;
+        RemoveRegistryEntry();
 
-        key.SetValue(
-            RunValueName,
-            GetStartupCommand());
-
-        RemoveScheduledTask();
+        Process.Start(
+            new ProcessStartInfo
+            {
+                FileName = "schtasks",
+                Arguments =
+                    $@"/Create /TN ""{TaskName}"" " +
+                    $@"/TR ""{GetStartupCommand()}"" " +
+                    "/SC ONLOGON /F",
+                CreateNoWindow = true,
+                UseShellExecute = false
+            })?.WaitForExit();
     }
 
 
     public static void Disable()
     {
-        using RegistryKey? key =
-            Registry.CurrentUser.OpenSubKey(
-                RunKeyPath,
-                writable: true);
+        Process.Start(
+            new ProcessStartInfo
+            {
+                FileName = "schtasks",
+                Arguments =
+                    $@"/Delete /TN ""{TaskName}"" /F",
+                CreateNoWindow = true,
+                UseShellExecute = false
+            })?.WaitForExit();
 
-        key?.DeleteValue(
-            RunValueName,
-            throwOnMissingValue: false);
-
-        RemoveScheduledTask();
+        RemoveRegistryEntry();
     }
 
 
@@ -67,15 +82,6 @@ public static class StartupManager
 
     public static bool IsEnabled()
     {
-        using RegistryKey? key =
-            Registry.CurrentUser.OpenSubKey(
-                RunKeyPath);
-
-        if (key?.GetValue(RunValueName) is string)
-        {
-            return true;
-        }
-
         return IsScheduledTaskRegistered();
     }
 
@@ -113,5 +119,16 @@ public static class StartupManager
         {
             Enable();
         }
+    }
+    private static void RemoveRegistryEntry()
+    {
+        using RegistryKey? key =
+            Registry.CurrentUser.OpenSubKey(
+                RunKeyPath,
+                writable: true);
+
+        key?.DeleteValue(
+            RunValueName,
+            throwOnMissingValue: false);
     }
 }
