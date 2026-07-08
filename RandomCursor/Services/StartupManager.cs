@@ -1,11 +1,13 @@
 using System.Diagnostics;
-using System.IO;
+using Microsoft.Win32;
 
 namespace RandomCursor.Services;
 
 public static class StartupManager
 {
     private const string TaskName = "RandomCursor";
+    private const string RunKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Run";
+    private const string RunValueName = "RandomCursor";
 
     private static string GetCoreExecutablePath()
     {
@@ -14,50 +16,42 @@ public static class StartupManager
     }
 
 
+    private static string GetStartupCommand()
+    {
+        return $"\"{GetCoreExecutablePath()}\" --startup-run";
+    }
+
+
     public static void Enable()
     {
-        string exePath =
-    GetCoreExecutablePath();
+        using RegistryKey key =
+            Registry.CurrentUser.CreateSubKey(
+                RunKeyPath)!;
 
-        string arguments =
-            "--startup-run";
+        key.SetValue(
+            RunValueName,
+            GetStartupCommand());
 
-        string taskCommand =
-            $@"/Create /TN ""RandomCursor"" " +
-            $@"/TR ""\""{exePath}\"" {arguments}"" " +
-            "/SC ONLOGON " +
-            "/DELAY 0000:30 " +
-            "/F";
-
-
-        var process = Process.Start(
-            new ProcessStartInfo
-            {
-                FileName = "schtasks",
-                Arguments = taskCommand,
-                CreateNoWindow = true,
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true
-            });
-
-
-        string output =
-            process!.StandardOutput.ReadToEnd();
-
-        string error =
-            process.StandardError.ReadToEnd();
-
-
-        File.WriteAllText(
-            Path.Combine(
-                AppDomain.CurrentDomain.BaseDirectory,
-                "startup_debug.txt"),
-            $"OUTPUT:\n{output}\nERROR:\n{error}");
+        RemoveScheduledTask();
     }
 
 
     public static void Disable()
+    {
+        using RegistryKey? key =
+            Registry.CurrentUser.OpenSubKey(
+                RunKeyPath,
+                writable: true);
+
+        key?.DeleteValue(
+            RunValueName,
+            throwOnMissingValue: false);
+
+        RemoveScheduledTask();
+    }
+
+
+    private static void RemoveScheduledTask()
     {
         Process.Start(
             new ProcessStartInfo
@@ -72,6 +66,21 @@ public static class StartupManager
 
 
     public static bool IsEnabled()
+    {
+        using RegistryKey? key =
+            Registry.CurrentUser.OpenSubKey(
+                RunKeyPath);
+
+        if (key?.GetValue(RunValueName) is string)
+        {
+            return true;
+        }
+
+        return IsScheduledTaskRegistered();
+    }
+
+
+    private static bool IsScheduledTaskRegistered()
     {
         Process process =
             Process.Start(
