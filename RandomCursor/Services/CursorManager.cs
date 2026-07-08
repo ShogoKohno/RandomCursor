@@ -61,7 +61,7 @@ public static class CursorManager
                 SpiSetCursors,
                 0,
                 IntPtr.Zero,
-                SpifUpdateIniFile | SpifSendChange);
+                0);
 
         if (!applied)
         {
