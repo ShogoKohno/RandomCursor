@@ -106,18 +106,19 @@ new Icon(
     }
     private void RunRandomCursor()
     {
-        Process.Start(
-            new ProcessStartInfo
-            {
-                FileName =
-                    "RandomCursor.exe",
+        var config = ConfigManager.Load();
+        Logger.Initialize(config);
 
-                Arguments =
-                    "--random",
+        var scheme = SchemeManager.GetRandom(config);
 
-                CreateNoWindow = true,
-                UseShellExecute = false
-            });
+        if (scheme == null)
+        {
+            Logger.Error("No scheme found");
+            return;
+        }
+
+        CursorManager.Apply(scheme);
+        Logger.Info($"Applied scheme: {scheme.Name}");
     }
 
 }

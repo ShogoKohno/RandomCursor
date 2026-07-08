@@ -1,8 +1,9 @@
 ﻿using RandomCursor.GUI.Services;
+using RandomCursor.Services;
 using System.Configuration;
 using System.Data;
-using System.Windows;
 using System.Threading;
+using System.Windows;
 
 namespace RandomCursor.GUI
 {   
@@ -22,6 +23,22 @@ namespace RandomCursor.GUI
         protected override void OnStartup(
             StartupEventArgs e)
         {
+            if (e.Args.Contains("--startup-run"))
+            {
+                var config = ConfigManager.Load();
+                Logger.Initialize(config);
+
+                var scheme = SchemeManager.GetRandom(config);
+                if (scheme != null)
+                {
+                    CursorManager.Apply(scheme);
+                    Logger.Info($"Applied scheme: {scheme.Name}");
+                }
+
+                Shutdown();
+                return;
+            }
+
             const string mutexName =
     "RandomCursor.GUI";
 

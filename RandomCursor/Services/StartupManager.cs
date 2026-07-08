@@ -20,9 +20,8 @@ public static class StartupManager
 
     private static string GetCoreExecutablePath()
     {
-        return Path.Combine(
-    AppDomain.CurrentDomain.BaseDirectory,
-    "RandomCursor.exe");
+        return Environment.ProcessPath
+            ?? throw new InvalidOperationException("実行ファイルのパスを取得できませんでした。");
     }
 
 
