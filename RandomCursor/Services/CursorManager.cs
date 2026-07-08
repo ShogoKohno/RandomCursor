@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+using Microsoft.Win32;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 using RandomCursor.Models;
 
@@ -6,6 +7,10 @@ namespace RandomCursor.Services;
 
 public static class CursorManager
 {
+    private const uint SpiSetCursors = 0x57;
+    private const uint SpifUpdateIniFile = 0x01;
+    private const uint SpifSendChange = 0x02;
+
     private static readonly string[] Names =
     {
     "Arrow",
@@ -52,17 +57,25 @@ public static class CursorManager
             scheme.Name);
 
 
-        SystemParametersInfo(
-            0x57,
-            0,
-            IntPtr.Zero,
-            0);
+        bool applied =
+            SystemParametersInfo(
+                SpiSetCursors,
+                0,
+                IntPtr.Zero,
+                SpifUpdateIniFile | SpifSendChange);
+
+        if (!applied)
+        {
+            throw new Win32Exception(
+                Marshal.GetLastWin32Error());
+        }
     }
 
 
 
     [DllImport(
-        "user32.dll")]
+        "user32.dll",
+        SetLastError = true)]
     private static extern bool SystemParametersInfo(
         uint action,
         uint param,

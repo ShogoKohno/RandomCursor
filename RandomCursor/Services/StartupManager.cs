@@ -26,6 +26,7 @@ public static class StartupManager
             $@"/Create /TN ""RandomCursor"" " +
             $@"/TR ""\""{exePath}\"" {arguments}"" " +
             "/SC ONLOGON " +
+            "/DELAY 0000:30 " +
             "/F";
 
 

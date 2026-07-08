@@ -25,14 +25,32 @@ namespace RandomCursor.GUI
         {
             if (e.Args.Contains("--startup-run"))
             {
-                var config = ConfigManager.Load();
-                Logger.Initialize(config);
-
-                var scheme = SchemeManager.GetRandom(config);
-                if (scheme != null)
+                try
                 {
-                    CursorManager.Apply(scheme);
-                    Logger.Info($"Applied scheme: {scheme.Name}");
+                    var config = ConfigManager.Load();
+                    Logger.Initialize(config);
+
+                    Logger.Info("Startup run requested. Waiting for desktop initialization.");
+                    Thread.Sleep(TimeSpan.FromSeconds(15));
+
+                    var scheme = SchemeManager.GetRandom(config);
+                    if (scheme != null)
+                    {
+                        CursorManager.Apply(scheme);
+                        Logger.Info($"Applied scheme: {scheme.Name}");
+
+                        Thread.Sleep(TimeSpan.FromSeconds(15));
+                        CursorManager.Apply(scheme);
+                        Logger.Info($"Reapplied startup scheme: {scheme.Name}");
+                    }
+                    else
+                    {
+                        Logger.Error("No scheme found for startup run.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex.ToString());
                 }
 
                 Shutdown();
