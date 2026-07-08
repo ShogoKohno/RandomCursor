@@ -7,21 +7,10 @@ public static class StartupManager
 {
     private const string TaskName = "RandomCursor";
 
-    private static string GetExecutablePath()
-    {
-        string directory =
-            AppDomain.CurrentDomain.BaseDirectory;
-
-
-        return System.IO.Path.Combine(
-            directory,
-            "RandomCursor.exe");
-    }
-
     private static string GetCoreExecutablePath()
     {
         return Environment.ProcessPath
-            ?? throw new InvalidOperationException("実行ファイルのパスを取得できませんでした。");
+            ?? throw new InvalidOperationException("Executable path could not be resolved.");
     }
 
 
@@ -105,5 +94,14 @@ public static class StartupManager
 
         return output.Contains(
             TaskName);
+    }
+
+
+    public static void RefreshIfEnabled()
+    {
+        if (IsEnabled())
+        {
+            Enable();
+        }
     }
 }

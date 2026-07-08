@@ -58,6 +58,9 @@ namespace RandomCursor.GUI
             base.OnStartup(e);
 
 
+            StartupManager.RefreshIfEnabled();
+
+
             _trayIcon =
                 new TrayIconManager();
 
