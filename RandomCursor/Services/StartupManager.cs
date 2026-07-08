@@ -20,7 +20,9 @@ public static class StartupManager
 
     private static string GetCoreExecutablePath()
     {
-        return @"C:\Users\torin\source\repos\RandomCursor\RandomCursor\bin\Debug\net8.0\RandomCursor.exe";
+        return Path.Combine(
+    AppDomain.CurrentDomain.BaseDirectory,
+    "RandomCursor.exe");
     }
 
 
@@ -59,7 +61,9 @@ public static class StartupManager
 
 
         File.WriteAllText(
-            "startup_debug.txt",
+            Path.Combine(
+                AppDomain.CurrentDomain.BaseDirectory,
+                "startup_debug.txt"),
             $"OUTPUT:\n{output}\nERROR:\n{error}");
     }
 

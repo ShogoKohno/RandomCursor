@@ -9,14 +9,10 @@
 	  <UseWindowsForms>true</UseWindowsForms>
 
 	  <ApplicationIcon>Resources\RandomCursor.ico</ApplicationIcon>
+
+	  <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\RandomCursor\RandomCursor.csproj" />
-	  <Content Include="..\RandomCursor\bin\Debug\net8.0\RandomCursor.exe">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </Content>
-  </ItemGroup>
 	<ItemGroup>
 		<Resource Include="Resources\RandomCursor.ico" />
 		<Content Include="Resources\RandomCursor.ico">
@@ -26,5 +22,7 @@
   <ItemGroup>
     <Folder Include="Resources\" />
   </ItemGroup>
-
+  <ItemGroup>
+    <ProjectReference Include="..\RandomCursor\RandomCursor.csproj" />
+  </ItemGroup>
 </Project>
