@@ -1,5 +1,4 @@
 using Microsoft.Win32;
-using System.ComponentModel;
 using System.Runtime.InteropServices;
 using RandomCursor.Models;
 
@@ -66,8 +65,8 @@ public static class CursorManager
 
         if (!applied)
         {
-            throw new Win32Exception(
-                Marshal.GetLastWin32Error());
+            Logger.Error(
+                $"SystemParametersInfo returned false. Win32Error={Marshal.GetLastWin32Error()}");
         }
     }
 

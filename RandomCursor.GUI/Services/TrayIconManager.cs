@@ -106,19 +106,26 @@ new Icon(
     }
     private void RunRandomCursor()
     {
-        var config = ConfigManager.Load();
-        Logger.Initialize(config);
-
-        var scheme = SchemeManager.GetRandom(config);
-
-        if (scheme == null)
+        try
         {
-            Logger.Error("No scheme found");
-            return;
-        }
+            var config = ConfigManager.Load();
+            Logger.Initialize(config);
 
-        CursorManager.Apply(scheme);
-        Logger.Info($"Applied scheme: {scheme.Name}");
+            var scheme = SchemeManager.GetRandom(config);
+
+            if (scheme == null)
+            {
+                Logger.Error("No scheme found");
+                return;
+            }
+
+            CursorManager.Apply(scheme);
+            Logger.Info($"Applied scheme: {scheme.Name}");
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(ex.ToString());
+        }
     }
 
 }
