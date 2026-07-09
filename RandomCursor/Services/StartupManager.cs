@@ -6,8 +6,10 @@ namespace RandomCursor.Services;
 public static class StartupManager
 {
     private const string TaskName = "RandomCursor";
+    private const string TaskNameGUI = "RandomCursor.GUI";
     private const string RunKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Run";
     private const string RunValueName = "RandomCursor";
+
 
     private static string GetCoreExecutablePath()
     {
@@ -130,5 +132,45 @@ public static class StartupManager
         key?.DeleteValue(
             RunValueName,
             throwOnMissingValue: false);
+    }
+
+
+    public static void SetTasktray()
+    {
+        string path = Path.Combine(
+    AppDomain.CurrentDomain.BaseDirectory,
+    "RandomCursor.GUI.exe");
+
+        using RegistryKey? key =
+            Registry.CurrentUser.OpenSubKey(
+                RunKeyPath,
+                true);
+
+        key?.SetValue(
+            TaskNameGUI,
+            $"\"{path}\"");
+    }
+    public static void RemoveTasktray()
+    {
+        string path = Path.Combine(
+    AppDomain.CurrentDomain.BaseDirectory,
+    "RandomCursor.GUI.exe");
+
+        using RegistryKey? key =
+            Registry.CurrentUser.OpenSubKey(
+                RunKeyPath,
+                true);
+
+        key?.DeleteValue(
+            TaskNameGUI,
+            throwOnMissingValue: false);
+    }
+    public static bool IsTasktraySeted()
+    {
+        using RegistryKey? key =
+            Registry.CurrentUser.OpenSubKey(
+                RunKeyPath);
+
+        return key?.GetValue(TaskNameGUI) != null;
     }
 }

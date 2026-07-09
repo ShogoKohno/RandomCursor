@@ -59,13 +59,25 @@
         <GroupBox
     Header="スタートアップ"
     Margin="0,0,0,10">
-
+            
             <StackPanel Margin="10">
-
+                <CheckBox
+    x:Name="StartWithWindowsCheckBox"
+    Content="PC起動時にRandomCursorをタスクトレイに格納する"
+    Checked="StartWithWindowsCheckBox_Checked"
+    Unchecked="StartWithWindowsCheckBox_Unchecked"
+                    Margin="0,0,0,10"/>
+                <StackPanel
+            Orientation="Horizontal"
+            Margin="0,10,0,0">
+                <TextBlock
+            Name="IsStartupText"
+            Text="PC起動時にカーソルをランダムに変更"
+                    Margin="0,0,40,10"/>
                 <TextBlock
             Name="StartupStatusText"
             Text="状態確認中"/>
-
+                </StackPanel>
 
                 <StackPanel
             Orientation="Horizontal"

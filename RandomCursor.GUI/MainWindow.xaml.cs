@@ -41,6 +41,9 @@ namespace RandomCursor.GUI
             WriteLogCheck.IsChecked =
     _config.WriteLog;
 
+            StartWithWindowsCheckBox.IsChecked =
+    StartupManager.IsTasktraySeted();
+
             foreach (var scheme in
     SchemeManager.GetAll(_config))
             {
@@ -201,6 +204,18 @@ namespace RandomCursor.GUI
             Hide();
 
             base.OnClosing(e);
+        }
+        private void StartWithWindowsCheckBox_Checked(
+    object sender,
+    RoutedEventArgs e)
+        {
+            StartupManager.SetTasktray();
+        }
+        private void StartWithWindowsCheckBox_Unchecked(
+    object sender,
+    RoutedEventArgs e)
+        {
+            StartupManager.RemoveTasktray();
         }
     }
 }

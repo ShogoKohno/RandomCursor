@@ -74,6 +74,11 @@ new Icon(
 
                 System.Windows.Application.Current.Shutdown();
             };
+
+        _notifyIcon.DoubleClick += (_, _) =>
+        {
+            OpenWindow();
+        };
     }
 
 
