@@ -146,7 +146,7 @@ namespace RandomCursor.GUI
 
 
             ShowStatus(
-                "スタートアップを有効化しました");
+                "ランダム変更を有効化しました");
         }
         private void DisableStartupButton_Click(
     object sender,
@@ -159,7 +159,7 @@ namespace RandomCursor.GUI
 
 
             ShowStatus(
-                "スタートアップを無効化しました");
+                "ランダム変更を無効化しました");
         }
         private async void ShowStatus(
             string message)

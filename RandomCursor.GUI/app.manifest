@@ -17,8 +17,8 @@
             削除します。
         -->
 		  <requestedExecutionLevel
-	  level="requireAdministrator"
-	  uiAccess="false" />
+    level="asInvoker"
+    uiAccess="false" />
       </requestedPrivileges>
     </security>
   </trustInfo>

@@ -72,10 +72,15 @@ public static class SchemeManager
         if (string.IsNullOrEmpty(name))
             return null;
 
+        HistoryManager.Save(
+name);
+
 
         return Load(config.Prefix)
             .FirstOrDefault(
                 x => x.Name == name);
+
+
     }
 
 

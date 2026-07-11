@@ -124,11 +124,6 @@
 
         </GroupBox>
 
-        <Button
-    Content="保存"
-    Width="120"
-    HorizontalAlignment="Right"
-    Click="SaveButton_Click"/>
         
         <TextBlock
     Name="StatusText"

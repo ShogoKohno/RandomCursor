@@ -38,7 +38,7 @@ public static class StartupManager
     {
         RemoveRegistryEntry();
 
-        Process.Start(
+        var process = Process.Start(
             new ProcessStartInfo
             {
                 FileName = "schtasks",
@@ -46,23 +46,27 @@ public static class StartupManager
                     $@"/Create /TN ""{TaskName}"" " +
                     $@"/TR ""{GetStartupCommand()}"" " +
                     "/SC ONLOGON /F",
-                CreateNoWindow = true,
-                UseShellExecute = false
-            })?.WaitForExit();
+                UseShellExecute = true,
+                Verb = "runas"
+            });
+
+        process?.WaitForExit();
     }
 
 
     public static void Disable()
     {
-        Process.Start(
+        var process = Process.Start(
             new ProcessStartInfo
             {
                 FileName = "schtasks",
                 Arguments =
                     $@"/Delete /TN ""{TaskName}"" /F",
-                CreateNoWindow = true,
-                UseShellExecute = false
-            })?.WaitForExit();
+                UseShellExecute = true,
+                Verb = "runas"
+            });
+
+        process?.WaitForExit();
 
         RemoveRegistryEntry();
     }
